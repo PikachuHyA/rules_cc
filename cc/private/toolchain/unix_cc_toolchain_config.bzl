@@ -1750,6 +1750,11 @@ def _impl(ctx):
         enabled = False,
     )
 
+    cpp_modules_with_two_phase_compilation_feature = feature(
+        name = "cpp_modules_with_two_phase_compilation",
+        enabled = False,
+    )
+
     cpp_module_modmap_file_feature = feature(
         name = "cpp_module_modmap_file",
         flag_sets = [
@@ -1774,6 +1779,10 @@ def _impl(ctx):
             flag_group(
                 flags = ["-fmodule-output=%{cpp_module_output_file}"],
                 expand_if_available = "cpp_module_output_file",
+            ),
+            flag_group(
+                flags = ["--precompile"],
+                expand_if_available = "cpp_modules_with_two_phase_compilation",
             ),
         ]
     else:
@@ -1805,6 +1814,7 @@ def _impl(ctx):
         ]
         features = [
             cpp_modules_feature,
+            cpp_modules_with_two_phase_compilation_feature,
             cpp_module_modmap_file_feature,
             cpp20_module_compile_flags_feature,
             dependency_file_feature,
@@ -1881,6 +1891,7 @@ def _impl(ctx):
         ]
         features = [
             cpp_modules_feature,
+            cpp_modules_with_two_phase_compilation_feature,
             cpp_module_modmap_file_feature,
             cpp20_module_compile_flags_feature,
             macos_minimum_os_feature,
